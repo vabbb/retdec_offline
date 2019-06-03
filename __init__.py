@@ -68,7 +68,7 @@ class RetDecFunctionConfig(RetDecConfig):
 
 
 class RetDecMainConfig(RetDecConfig):
-    ARCHS = ['x86', 'mips', 'powerpc', 'arm']
+    ARCHS = ['x86', 'mips', 'powerpc', 'arm', 'x86_64']
     ENDIANNESS = ['big', 'little']
 
     def __init__(self):
@@ -85,7 +85,11 @@ class RetDecMainConfig(RetDecConfig):
             msg = 'unsupported architecture: {}'.format(arch)
             info = 'Only {} architectures are supported'.format(', '.join(self.ARCHS))
             raise ExceptionWithMessageBox(msg, info)
-        self._conf['architecture']['name'] = arch
+        if arch == 'x86_64':
+            self._conf['architecture']['name'] = 'x86-64'
+        else:
+            self._conf['architecture']['name'] = arch
+
 
     @property
     def endianness(self):
@@ -145,7 +149,7 @@ class RetDec(object):
         self._function = function
 
         self.conf = RetDecConfigFactory.main(self._view)
-        self.conf.add_function(RetDecConfigFactory.func(self._function))
+        # self.conf.add_function(RetDecConfigFactory.func(self._function))
 
         self._cmdline = ['retdec-decompiler.py']
         self._cmdline.append('--backend-no-debug-comments')
