@@ -45,7 +45,8 @@ class RetDecFunctionConfig(RetDecConfig):
                            "CC_SPOILED",
                            "CC_SPECIALE",
                            "CC_SPECIALP",
-                           "CC_SPECIAL"]
+                           "CC_SPECIAL",
+                           "CC_X64",]
 
     def __init__(self, start_addr):
         self._conf = {'startAddr': str(start_addr)}
@@ -127,7 +128,8 @@ class RetDecConfigFactory(object):
                     'spoiled': "CC_SPOILED",
                     'speciale': "CC_SPECIALE",
                     'specialp': "CC_SPECIALP",
-                    'special': "CC_SPECIAL"}
+                    'special': "CC_SPECIAL",
+                    'sysv': "CC_X64"}
 
     @classmethod
     def main(cls, view):
@@ -139,7 +141,9 @@ class RetDecConfigFactory(object):
     @classmethod
     def func(cls, function):
         conf = RetDecFunctionConfig(function.start)
+        log.log_error("swag")
         conf.calling_convention = cls.CC_TRANSLATE[function.calling_convention.name]
+        log.log_error("swag")
         return conf
 
 
@@ -149,7 +153,7 @@ class RetDec(object):
         self._function = function
 
         self.conf = RetDecConfigFactory.main(self._view)
-        # self.conf.add_function(RetDecConfigFactory.func(self._function))
+        self.conf.add_function(RetDecConfigFactory.func(self._function))
 
         self._cmdline = ['retdec-decompiler.py']
         self._cmdline.append('--backend-no-debug-comments')
