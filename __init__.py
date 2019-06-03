@@ -141,9 +141,7 @@ class RetDecConfigFactory(object):
     @classmethod
     def func(cls, function):
         conf = RetDecFunctionConfig(function.start)
-        log.log_error("swag")
         conf.calling_convention = cls.CC_TRANSLATE[function.calling_convention.name]
-        log.log_error("swag")
         return conf
 
 
