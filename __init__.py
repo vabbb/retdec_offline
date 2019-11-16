@@ -244,6 +244,7 @@ class RetDec(object):
     def merge_symbols(self, code):
         pcode = []
         pattern = re.compile(r'(unknown_|0x)([a-f0-9]+)')
+        pattern2 = re.compile(r'(function_|0x)([a-f0-9]+)')
 
         for line in code.splitlines():
             if line.strip().startswith('//') or line.strip().startswith('#'):
@@ -254,6 +255,10 @@ class RetDec(object):
                 line = self.replace_symbols(line, self._function.start, 'entry_point')
 
             for match in pattern.findall(line):
+                address = int(match[1], 16)
+                line = self.replace_symbols(line, address, ''.join(match))
+
+            for match in pattern2.findall(line):
                 address = int(match[1], 16)
                 line = self.replace_symbols(line, address, ''.join(match))
 
